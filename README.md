@@ -1,3 +1,3 @@
-# Maker Lab Game
+# Maker Lab Server
 
-A web game made for FIT3146 Maker Lab.
+The server for a web game made for FIT3146 Maker Lab.
