@@ -6,11 +6,7 @@ tag = PiicoDev_RFID()
 string = 'Hello World!'
 
 while True:
-    result = tag.writeText(string)
-
-    if result:
-        data = tag.readText()
-        print('String in tag: ' + str(data))
-        break
+    data = tag.readText()
+    print('Tag String: ' + str(data))
 
     sleep_ms(10)

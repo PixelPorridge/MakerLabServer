@@ -2,11 +2,10 @@
 from flask import Flask, request
 from flask_cors import CORS
 from PiicoDev_RFID import PiicoDev_RFID
+from PiicoDev_Unified import sleep_ms
 
 # File Imports
-from modules.tags import *
-from modules.champions import *
-from modules.spells import *
+from tags import *
 
 # Flask Setup
 app = Flask(__name__)
@@ -15,25 +14,24 @@ CORS(app)
 # PiicoDev RFID Setup
 tag = PiicoDev_RFID()
 
+# Constants
+SCAN_COUNT = 200
+
 
 @app.route("/scan-tag")
 def scan_tag():
-    id = tag.readID()
+    for i in range(SCAN_COUNT):
+        id = tag.readID()
 
-    if id:
-        return "Tag ID: " + id
-    else:
-        return "Scan Tag Request Failed!", 500
+        if id:
+            return "Tag ID: " + id
+
+    return "Scan Tag Request Timeout!", 500
 
 
 @app.route("/reset-champion")
 def reset_champion():
     return "Reset Champion Request Failed!", 500
-
-
-@app.route("/reset-spell")
-def reset_spell():
-    return "Reset Spell Request Failed!", 500
 
 
 @app.route("/set-champion")
