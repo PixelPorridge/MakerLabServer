@@ -23,8 +23,8 @@ db = client.game
 
 
 # Read Tag
-@app.route("/read-tag", methods=["GET"])
-def read_tag():
+@app.route("/read-id", methods=["GET"])
+def read_id():
     while True:
         id = tag.readID()
 
@@ -36,7 +36,6 @@ def read_tag():
 @app.route("/set-champion", methods=["POST"])
 def set_champion():
     data = request.json
-    champions = db.champions
 
     while True:
         id = tag.readID()
@@ -44,24 +43,32 @@ def set_champion():
         if id:
             data["_id"] = id
 
-            if champions.find_one({"_id": id}):
-                champions.update_one({"_id": id}, {"$set": data})
+            if db.champions.find_one({"_id": id}):
+                db.champions.update_one({"_id": id}, {"$set": data})
             else:
-                champions.insert_one(data)
+                db.champions.insert_one(data)
 
             return "Success!"
+
+
+# Update Champion
+@app.route("/update-champion", methods=["POST"])
+def update_champion():
+    data = request.json
+
+    db.champions.update_one({"_id": data["_id"]}, {"$set": data})
+
+    return "Success!"
 
 
 # Get Champion
 @app.route("/get-champion", methods=["GET"])
 def get_champion():
-    champions = db.champions
-
     while True:
         id = tag.readID()
 
         if id:
-            data = champions.find_one({"_id": id})
+            data = db.champions.find_one({"_id": id})
 
             if data:
                 return data
@@ -71,7 +78,6 @@ def get_champion():
 @app.route("/set-spell", methods=["POST"])
 def set_spell():
     data = request.json
-    spells = db.spells
 
     while True:
         id = tag.readID()
@@ -79,10 +85,10 @@ def set_spell():
         if id:
             data["_id"] = id
 
-            if spells.find_one({"_id": id}):
-                spells.update_one({"_id": id}, {"$set": data})
+            if db.spells.find_one({"_id": id}):
+                db.spells.update_one({"_id": id}, {"$set": data})
             else:
-                spells.insert_one(data)
+                db.spells.insert_one(data)
 
             return "Success!"
 
@@ -90,13 +96,20 @@ def set_spell():
 # Get Spell
 @app.route("/get-spell", methods=["GET"])
 def get_spell():
-    spells = db.spells
-
     while True:
         id = tag.readID()
 
         if id:
-            data = spells.find_one({"_id": id})
+            data = db.spells.find_one({"_id": id})
 
             if data:
                 return data
+
+
+# Clear Database
+@app.route("/clear-database", methods=["GET"])
+def clear_database():
+    db.champions.delete_many({})
+    db.spells.delete_many({})
+
+    return "Success!"
