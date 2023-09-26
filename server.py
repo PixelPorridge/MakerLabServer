@@ -32,6 +32,15 @@ def read_id():
             return id
 
 
+# Clear Database
+@app.route("/clear-database", methods=["GET"])
+def clear_database():
+    db.champions.delete_many({})
+    db.spells.delete_many({})
+
+    return "Success!"
+
+
 # Set Champion
 @app.route("/set-champion", methods=["POST"])
 def set_champion():
@@ -93,6 +102,16 @@ def set_spell():
             return "Success!"
 
 
+# Update Spell
+@app.route("/update-spell", methods=["POST"])
+def update_spell():
+    data = request.json
+
+    db.spells.update_one({"_id": data["_id"]}, {"$set": data})
+
+    return "Success!"
+
+
 # Get Spell
 @app.route("/get-spell", methods=["GET"])
 def get_spell():
@@ -104,12 +123,3 @@ def get_spell():
 
             if data:
                 return data
-
-
-# Clear Database
-@app.route("/clear-database", methods=["GET"])
-def clear_database():
-    db.champions.delete_many({})
-    db.spells.delete_many({})
-
-    return "Success!"
