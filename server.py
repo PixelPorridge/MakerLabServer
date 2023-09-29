@@ -21,15 +21,20 @@ tag = PiicoDev_RFID()
 client = MongoClient(os.getenv("MONGODB_CONNECTION"))
 db = client.game
 
+# Request Timeout
+TIMEOUT = 100
+
 
 # Read Tag
 @app.route("/read-id", methods=["GET"])
 def read_id():
-    while True:
+    for _ in range(TIMEOUT):
         id = tag.readID()
 
         if id:
             return id
+
+    return "Timeout!", 500
 
 
 # Clear Database
@@ -46,7 +51,7 @@ def clear_database():
 def set_champion():
     data = request.json
 
-    while True:
+    for _ in range(TIMEOUT):
         id = tag.readID()
 
         if id:
@@ -58,6 +63,8 @@ def set_champion():
                 db.champions.insert_one(data)
 
             return "Success!"
+
+    return "Timeout!", 500
 
 
 # Update Champion
@@ -73,7 +80,7 @@ def update_champion():
 # Get Champion
 @app.route("/get-champion", methods=["GET"])
 def get_champion():
-    while True:
+    for _ in range(TIMEOUT):
         id = tag.readID()
 
         if id:
@@ -82,13 +89,15 @@ def get_champion():
             if data:
                 return data
 
+    return "Timeout!", 500
+
 
 # Set Spell
 @app.route("/set-spell", methods=["POST"])
 def set_spell():
     data = request.json
 
-    while True:
+    for _ in range(TIMEOUT):
         id = tag.readID()
 
         if id:
@@ -100,6 +109,8 @@ def set_spell():
                 db.spells.insert_one(data)
 
             return "Success!"
+
+    return "Timeout!", 500
 
 
 # Update Spell
@@ -115,7 +126,7 @@ def update_spell():
 # Get Spell
 @app.route("/get-spell", methods=["GET"])
 def get_spell():
-    while True:
+    for _ in range(TIMEOUT):
         id = tag.readID()
 
         if id:
@@ -123,3 +134,5 @@ def get_spell():
 
             if data:
                 return data
+
+    return "Timeout!", 500
