@@ -34,7 +34,7 @@ def read_id():
         if id:
             return id
 
-    return "Timeout!", 500
+    return "Timeout!", 408
 
 
 # Clear Database
@@ -62,9 +62,9 @@ def set_champion():
             else:
                 db.champions.insert_one(data)
 
-            return "Success!"
+            return db.champions.find_one({"_id": id})
 
-    return "Timeout!", 500
+    return "Timeout!", 408
 
 
 # Update Champion
@@ -74,7 +74,7 @@ def update_champion():
 
     db.champions.update_one({"_id": data["_id"]}, {"$set": data})
 
-    return "Success!"
+    return db.champions.find_one({"_id": data["_id"]})
 
 
 # Get Champion
@@ -89,7 +89,7 @@ def get_champion():
             if data:
                 return data
 
-    return "Timeout!", 500
+    return "Timeout!", 408
 
 
 # Set Spell
@@ -108,9 +108,9 @@ def set_spell():
             else:
                 db.spells.insert_one(data)
 
-            return "Success!"
+            return db.spells.find_one({"_id": id})
 
-    return "Timeout!", 500
+    return "Timeout!", 408
 
 
 # Update Spell
@@ -120,7 +120,7 @@ def update_spell():
 
     db.spells.update_one({"_id": data["_id"]}, {"$set": data})
 
-    return "Success!"
+    return db.spells.find_one({"_id": data["_id"]})
 
 
 # Get Spell
@@ -135,4 +135,4 @@ def get_spell():
             if data:
                 return data
 
-    return "Timeout!", 500
+    return "Timeout!", 408
