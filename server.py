@@ -15,7 +15,7 @@ app = Flask(__name__)
 CORS(app)
 
 # PiicoDev RFID Setup
-tag = PiicoDev_RFID()
+tag = PiicoDev_RFID(bus=0)
 
 # MongoDB Setup
 client = MongoClient(os.getenv("MONGODB_CONNECTION"))
