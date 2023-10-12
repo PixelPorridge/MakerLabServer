@@ -136,3 +136,7 @@ def get_spell():
                 return data
 
     return "Timeout!", 408
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
